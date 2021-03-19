@@ -1,8 +1,8 @@
 {
 	"variables": {
-		"client_id": "{{env `ARM_CLIENT_ID`}}",
-		"client_secret": "{{env `ARM_CLIENT_SECRET`}}",
-		"subscription_id": "{{env `ARM_SUBSCRIPTION_ID`}}"
+		"client_id": "{{env `087b41c2-003d-42ab-84fd-65eb48dddf8a`}}",
+		"client_secret": "{{env `_aJ5Z-LI2BH2naI1K8x_6LtPffE2_sIx03`}}",
+		"subscription_id": "{{env `8f1f9ef1-522d-49f2-b4c5-5cf775f1769a`}}"
 	},
 	"builders": [{
 		**YOUR CODE HERE**
