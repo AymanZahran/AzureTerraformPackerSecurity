@@ -1,13 +1,10 @@
 {
+  "type": "Microsoft.Authorization/policyDefinitions",
+  "name": "Tagging-Policy",
   "properties": {
     "displayName": "Require a tag on resources",
-    "policyType": "BuiltIn",
-    "mode": "Indexed",
+    "mode": "all",
     "description": "Enforces existence of a tag. Does not apply to resource groups.",
-    "metadata": {
-      "version": "1.0.1",
-      "category": "Tags"
-    },
     "parameters": {
       "tagName": {
         "type": "String",
@@ -26,5 +23,5 @@
         "effect": "deny"
       }
     }
-  }
+  },
 }
