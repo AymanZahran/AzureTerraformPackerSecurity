@@ -6,5 +6,5 @@ Policy:
 Packer:
 	echo Building Packer Image
 Terraform:
-	Building the Infrastructure
+	terraform apply
 all: Policy Packer Terraform
