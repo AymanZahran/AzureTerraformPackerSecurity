@@ -1,11 +1,12 @@
 {
 	"variables": {
-		"client_id": "{{env `CLIENT_ID`}}",
-		"client_secret": "{{env `CLIENT_SECRET`}}",
-		"tenant_id": "{{env `TENANT_ID`}}",
-		"subscription_id": "{{env `AZURE_SUBSCRIPTION_ID`}}"
+		"client_id": "{{ CLIENT_ID }}",
+		"client_secret": "{{ CLIENT_SECRET }}",
+		"tenant_id": "{{ TENANT_ID }}",
+		"subscription_id": "{{ AZURE_SUBSCRIPTION_ID }}"
 	},
 	"builders": [{
+		"type": "azure-arm",
 		"managed_image_resource_group_name": "myPackerGroup",
                 "managed_image_name": "myPackerImage",
 		"os_type": "Linux",

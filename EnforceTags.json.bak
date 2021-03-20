@@ -1,11 +1,11 @@
 {
   "type": "Microsoft.Authorization/policyDefinitions",
-  "name": "Enforcing-Tags-Accross-All-Subscription-Resource", 
+  "name": "Tagging-Policy",
   "properties": {
-    "mode": "all",
     "displayName": "Require a tag on resources",
-    "description": "Enforcing Tags Accross All Subscription Resource",
-  "parameters": {
+    "mode": "all",
+    "description": "Enforces existence of a tag. Does not apply to resource groups.",
+    "parameters": {
       "tagName": {
         "type": "String",
         "metadata": {
@@ -23,5 +23,5 @@
         "effect": "deny"
       }
     }
-  }
+  },
 }
