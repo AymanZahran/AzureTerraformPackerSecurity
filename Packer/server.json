@@ -1,0 +1,51 @@
+{
+	"variables": {
+                "VAR_AZURE_SUBSCRIPTION_ID": "{{ env `AZURE_SUBSCRIPTION_ID` }}",
+		"VAR_AZURE_TENANT_ID": "{{ env `AZURE_TENANT_ID` }}",
+		"VAR_AZURE_CLIENT_ID": "{{ env `AZURE_CLIENT_ID` }}",
+                "VAR_AZURE_CLIENT_SECRET": "{{ env `AZURE_CLIENT_SECRET` }}",
+		"RESOURCE_GROUP"="{{ env `AZURE_CLIENT_SECRET` }}"
+		"IMAGE_NAME"="{{ env `AZURE_CLIENT_SECRET` }}",
+		"OS_TYPE"=""{{ env `AZURE_CLIENT_SECRET` }}"",
+		"IMAGE_PUBLISHER"=""{{ env `AZURE_CLIENT_SECRET` }}"",
+		"IMAGE_OFFER"="{{ env `AZURE_CLIENT_SECRET` }}",
+IMAGE_SKU="18.04-LTS",
+BUILD_RESOURCE_GROUP="MyPackerGroup,
+VM_SIZE="Standard_D2_v2"
+	},
+	"builders": [{
+		"subscription_id": "{{ user `AZURE_SUBSCRIPTION_ID` }}",
+                "tenant_id": "{{ user `AZURE_TENANT_ID` }}",
+                "client_id": "{{ user `AZURE_CLIENT_ID` }}",
+                "client_secret": "{{ user `AZURE_CLIENT_SECRET` }}",
+
+		"type": "azure-arm",
+		"managed_image_resource_group_name": "myPackerGroup",
+                "managed_image_name": "myPackerImage",
+		"os_type": "Linux",
+		"image_publisher": "Canonical",
+		"image_offer": "UbuntuServer",
+		"image_sku": "18.04-LTS",
+
+		"communicator": "winrm",
+		"winrm_use_ssl": true,
+		"winrm_insecure": true,
+		"winrm_timeout": "5m",
+		"winrm_username": "packer",
+
+		"azure_tags": {
+			"Service": "Web"
+		},
+
+		"build_resource_group_name": "myPackerGroup",
+		"vm_size": "Standard_D2_v2"
+	}],
+	"provisioners": [{
+		"inline": [
+			"echo 'Hello, World!' > index.html",
+			"nohup busybox httpd -f -p 80 &"
+			],
+			"inline_shebang": "/bin/sh -x",
+			"type": "shell"
+	}]
+}
