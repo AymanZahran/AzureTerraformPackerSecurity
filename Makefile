@@ -27,6 +27,6 @@ terraform-apply:
 	cd -
 
 packer-build:
-	cd packer && \
-	packer build server.json && \
+	cd packer
+	packer build server.json
 	cd -
