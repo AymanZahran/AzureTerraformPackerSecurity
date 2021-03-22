@@ -1,14 +1,7 @@
-variable "digital_ocean_api_token" {}
-variable "droplet_image" {
-  description = "The Digital Ocean Snapshot ID that was returned from Packer"
-}
-variable "droplet_name" {}
-variable "droplet_region" {}
-variable "droplet_size" {}
-variable "pub_key" {}
-variable "pvt_key" {}
-variable "ssh_fingerprint" {}
-
-provider "digitalocean" {
-  token = "${var.digital_ocean_api_token}"
+provider "azurerm" {
+    subscription_id = var.AZURE_SUBSCRIPTION_ID
+    tenant_id       = var.AZURE_TENANT_ID
+    client_id       = var.AZURE_CLIENT_ID
+    client_secret   = var.AZURE_CLIENT_SECRET
+    features {}
 }
