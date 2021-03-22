@@ -1,6 +1,18 @@
 include .env
 export $(shell sed 's/=.*//' .env)
 
+Tagging-Policy-Definition:
+	cd Policies &&\
+	./Tagging-Policy-Definition-Execute.sh &&\
+	cd ..
+
+Tagging-Policy-Assignment:
+	cd Policies &&\
+	bash Tagging-Policy-Assignment-Execute.sh &&\
+	cd ..
+
+Tagging-Policy: Tagging-Policy-Definition Tagging-Policy-Assignment
+
 terraform-init:
 	cd terraform && terraform init && cd -
 
