@@ -3,3 +3,8 @@ variable "AZURE_TENANT_ID" {}
 variable "AZURE_CLIENT_ID" {}
 variable "AZURE_CLIENT_SECRET" {}
 variable "AZURE_LOCATION" {}
+variable "IMAGE_NAME" {}
+variable "USERNAME" {}
+variable "PASSWORD" {}
+variale "VM_SIZE" {}
+variable "HOSTNAME" {}
