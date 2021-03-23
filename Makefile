@@ -1,9 +1,11 @@
 include .env
-export $(shell sed 's/=.*//' .env)
+
+Preparing-Environment:
+	export $(cat .env | xargs)
 
 Tagging-Policy-Definition:
 	cd Policies &&\
-	./Tagging-Policy-Definition-Execute.sh &&\
+	bash Tagging-Policy-Definition-Execute.sh &&\
 	cd ..
 
 Tagging-Policy-Assignment:

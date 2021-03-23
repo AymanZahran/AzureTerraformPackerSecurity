@@ -2,8 +2,8 @@
       "tagName": {
         "type": "String",
         "metadata": {
-          "displayName": "Tag Name",
-          "description": "Name of the tag, such as 'environment'"
+          "displayName": "webserver-env",
+          "description": "obligatory tag for all resources 'webserver-env'"
         }
       }
 }
