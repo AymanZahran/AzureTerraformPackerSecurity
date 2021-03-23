@@ -209,7 +209,7 @@ resource "azurerm_availability_set" "AS-WebServers" {
 
 
 #Creating Virtual Machines Deployed from Packer Image
-resource "azurerm_virtual_machine" "WebServer2" {
+resource "azurerm_virtual_machine" "WebServer1" {
   name                  = "WebServer1"
   location              = azurerm_resource_group.RG-WebServers.location
   resource_group_name   = azurerm_resource_group.RG-WebServers.name
@@ -220,16 +220,75 @@ resource "azurerm_virtual_machine" "WebServer2" {
   availability_set_id = azurerm_availability_set.AS-WebServers.id
 
   storage_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "16.04-LTS"
-    version   = "latest"
+    id = var.IMAGE_NAME
   }
   storage_os_disk {
     name              = "WebServerOSdisk1"
     caching           = "ReadWrite"
     create_option     = "FromImage"
-    managed_disk_type = var.VM_SIZE
+    managed_disk_type = "Standard_LRS"
+  }
+  os_profile {
+    computer_name  = var.HOSTNAME
+    admin_username = var.USERNAME
+    admin_password = var.PASSWORD
+  }
+  os_profile_linux_config {
+    disable_password_authentication = false
+  }
+  tags = {
+    webserver-env = "Production"
+  }
+}
+resource "azurerm_virtual_machine" "WebServer2" {
+  name                  = "WebServer2"
+  location              = azurerm_resource_group.RG-WebServers.location
+  resource_group_name   = azurerm_resource_group.RG-WebServers.name
+  network_interface_ids = [azurerm_network_interface.VNIC-WebServer2.id]
+  vm_size               = var.VM_SIZE
+  delete_os_disk_on_termination = true
+  delete_data_disks_on_termination = true
+  availability_set_id = azurerm_availability_set.AS-WebServers.id
+
+  storage_image_reference {
+    id = var.IMAGE_NAME
+  }
+  storage_os_disk {
+    name              = "WebServerOSdisk2"
+    caching           = "ReadWrite"
+    create_option     = "FromImage"
+    managed_disk_type = "Standard_LRS"
+  }
+  os_profile {
+    computer_name  = var.HOSTNAME
+    admin_username = var.USERNAME
+    admin_password = var.PASSWORD
+  }
+  os_profile_linux_config {
+    disable_password_authentication = false
+  }
+  tags = {
+    webserver-env = "Production"
+  }
+}
+resource "azurerm_virtual_machine" "WebServer3" {
+  name                  = "WebServer3"
+  location              = azurerm_resource_group.RG-WebServers.location
+  resource_group_name   = azurerm_resource_group.RG-WebServers.name
+  network_interface_ids = [azurerm_network_interface.VNIC-WebServer3.id]
+  vm_size               = var.VM_SIZE
+  delete_os_disk_on_termination = true
+  delete_data_disks_on_termination = true
+  availability_set_id = azurerm_availability_set.AS-WebServers.id
+
+  storage_image_reference {
+    id = var.IMAGE_NAME
+  }
+  storage_os_disk {
+    name              = "WebServerOSdisk3"
+    caching           = "ReadWrite"
+    create_option     = "FromImage"
+    managed_disk_type = "Standard_LRS"
   }
   os_profile {
     computer_name  = var.HOSTNAME

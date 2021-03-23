@@ -1,51 +1,42 @@
 {
-	"variables": {
-                "VAR_AZURE_SUBSCRIPTION_ID": "{{ env `AZURE_SUBSCRIPTION_ID` }}",
-		"VAR_AZURE_TENANT_ID": "{{ env `AZURE_TENANT_ID` }}",
-		"VAR_AZURE_CLIENT_ID": "{{ env `AZURE_CLIENT_ID` }}",
-                "VAR_AZURE_CLIENT_SECRET": "{{ env `AZURE_CLIENT_SECRET` }}",
-		"RESOURCE_GROUP"="{{ env `AZURE_CLIENT_SECRET` }}"
-		"IMAGE_NAME"="{{ env `AZURE_CLIENT_SECRET` }}",
-		"OS_TYPE"=""{{ env `AZURE_CLIENT_SECRET` }}"",
-		"IMAGE_PUBLISHER"=""{{ env `AZURE_CLIENT_SECRET` }}"",
-		"IMAGE_OFFER"="{{ env `AZURE_CLIENT_SECRET` }}",
-IMAGE_SKU="18.04-LTS",
-BUILD_RESOURCE_GROUP="MyPackerGroup,
-VM_SIZE="Standard_D2_v2"
-	},
-	"builders": [{
-		"subscription_id": "{{ user `AZURE_SUBSCRIPTION_ID` }}",
-                "tenant_id": "{{ user `AZURE_TENANT_ID` }}",
-                "client_id": "{{ user `AZURE_CLIENT_ID` }}",
-                "client_secret": "{{ user `AZURE_CLIENT_SECRET` }}",
+    "variables": {
+        "VAR_AZURE_SUBSCRIPTION_ID": "{{ env `AZURE_SUBSCRIPTION_ID` }}",
+        "VAR_AZURE_TENANT_ID": "{{ env `AZURE_TENANT_ID` }}",
+        "VAR_RESOURCE_GROUP": "{{ env `RESOURCE_GROUP` }}",
+        "VAR_IMAGE_NAME": "{{ env `IMAGE_NAME` }}",
+        "VAR_OS_TYPE": "{{ env `OS_TYPE` }}",
+        "VAR_IMAGE_PUBLISHER": "{{ env `IMAGE_PUBLISHER` }}",
+        "VAR_IMAGE_OFFER": "{{ env `IMAGE_OFFER` }}",
+        "VAR_IMAGE_SKU": "{{ env `IMAGE_SKU` }}",
+        "VAR_BUILD_RESOURCE_GROUP": "{{ env `BUILD_RESOURCE_GROUP` }}",
+        "VAR_VM_SIZE": "{{ env `VM_SIZE` }}"
+    },
+    "builders": [{
+        "type": "azure-arm",
+        "subscription_id": "{{ user `VAR_AZURE_SUBSCRIPTION_ID` }}",
+        "tenant_id": "{{ user `VAR_AZURE_TENANT_ID` }}",
+        "managed_image_resource_group_name": "{{ user `VAR_RESOURCE_GROUP` }}",
+        "build_resource_group_name": "{{ user `VAR_BUILD_RESOURCE_GROUP` }}",
+        "managed_image_name": "{{ user `VAR_IMAGE_NAME` }}",
+        "os_type": "{{ user `VAR_OS_TYPE` }}",
+        "image_publisher": "{{ user `VAR_IMAGE_PUBLISHER` }}",
+        "image_offer": "{{ user `VAR_IMAGE_OFFER` }}",
+        "image_sku": "{{ user `VAR_IMAGE_SKU` }}",
+        "vm_size": "{{ user `VAR_VM_SIZE` }}",
 
-		"type": "azure-arm",
-		"managed_image_resource_group_name": "myPackerGroup",
-                "managed_image_name": "myPackerImage",
-		"os_type": "Linux",
-		"image_publisher": "Canonical",
-		"image_offer": "UbuntuServer",
-		"image_sku": "18.04-LTS",
 
-		"communicator": "winrm",
-		"winrm_use_ssl": true,
-		"winrm_insecure": true,
-		"winrm_timeout": "5m",
-		"winrm_username": "packer",
+        "azure_tags": {
+            "webserver-env": "Production"
+        }
 
-		"azure_tags": {
-			"Service": "Web"
-		},
-
-		"build_resource_group_name": "myPackerGroup",
-		"vm_size": "Standard_D2_v2"
-	}],
-	"provisioners": [{
-		"inline": [
-			"echo 'Hello, World!' > index.html",
-			"nohup busybox httpd -f -p 80 &"
-			],
-			"inline_shebang": "/bin/sh -x",
-			"type": "shell"
-	}]
+      }],
+    "provisioners": [{
+        "inline": [
+            "echo 'Hello, World!' > index.html",
+            "nohup busybox httpd -f -p 80 &"
+            ],
+            "inline_shebang": "/bin/sh -x",
+            "type": "shell"
+      }]
 }
+

@@ -6,5 +6,5 @@ variable "AZURE_LOCATION" {}
 variable "IMAGE_NAME" {}
 variable "USERNAME" {}
 variable "PASSWORD" {}
-variale "VM_SIZE" {}
+variable "VM_SIZE" {}
 variable "HOSTNAME" {}
