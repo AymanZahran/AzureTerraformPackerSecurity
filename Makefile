@@ -1,5 +1,5 @@
 Preparing-Environment:
-	export $(cat .env | xargs)
+	chmod +x setENV.sh && bash setENV.sh
 
 Tagging-Policy-Definition:
 	cd Policies && bash Tagging-Policy-Definition-Execute.sh && cd ..
@@ -16,12 +16,12 @@ Terraform-init:
 	cd terraform && terraform init && cd ..
 
 Terraform-plan:
-	cd terraform && terraform plan && cd ..
+	cd terraform && terraform plan -out solution.plan && cd ..
 
 Terraform-apply:
 	cd terraform && terraform apply --auto-approve && cd ..
 
 Terraform-build: Terraform-init Terraform-plan Terraform-apply
 
-Automate: Tagging-Policy Packer-build Terraform-build
+Automate: Preparing-Environment Tagging-Policy Packer-build Terraform-build
 
