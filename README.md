@@ -29,7 +29,7 @@ Build your infrastructure by run "make Automate", That will build the following
 	f. N Public IPs
 	g. N vNICs
 	h. 1 Availability Set
-	f. Loadbalancer
+	f. 1 Loadbalancer
 
 ### Output
 Curl your LoadBalancer Public IP to see your deployed highly available WebServe
