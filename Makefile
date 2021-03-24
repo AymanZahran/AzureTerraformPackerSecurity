@@ -1,5 +1,6 @@
 Preparing-Environment:
 	chmod +x setENV.sh && bash setENV.sh
+	chmod +x Packer/build-RG.sh
 
 Tagging-Policy-Definition:
 	cd Policies && bash Tagging-Policy-Definition-Execute.sh && cd ..
@@ -9,8 +10,13 @@ Tagging-Policy-Assignment:
 
 Tagging-Policy: Tagging-Policy-Definition Tagging-Policy-Assignment
 
-Packer-build:
+Packer-RG:
+	cd Packer && bash build-RG.sh && cd ..
+
+Packer-Template:
 	cd Packer && Packer build server.json && cd ..
+
+Packer-Build: Packer-RG && Packer-Template
 
 Terraform-init:
 	cd terraform && terraform init && cd ..
