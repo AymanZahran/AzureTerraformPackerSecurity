@@ -26,8 +26,9 @@ resource "azurerm_subnet" "Subnet-WebServers" {
 }
 
 # Create a Public IPs in the production-resources resource group
-resource "azurerm_public_ip" "PublicIP-WebServer1" {
-  name                = "PublicIP-WebServer1"
+resource "azurerm_public_ip" "PublicIP-WebServer" {
+  count = var.NO_VMs
+  name                = "PublicIP-WebServer-${count.index}"
   resource_group_name = azurerm_resource_group.RG-WebServers.name
   location            = azurerm_resource_group.RG-WebServers.location
   allocation_method   = "Static"
@@ -35,68 +36,69 @@ resource "azurerm_public_ip" "PublicIP-WebServer1" {
     webserver-env = "Production"
   }
 }
-resource "azurerm_public_ip" "PublicIP-WebServer2" {
-  name                = "PublicIP-WebServer2"
-  resource_group_name = azurerm_resource_group.RG-WebServers.name
-  location            = azurerm_resource_group.RG-WebServers.location
-  allocation_method   = "Static"
-  tags = {
-    webserver-env = "Production"
-  }
-}
-resource "azurerm_public_ip" "PublicIP-WebServer3" {
-  name                = "PublicIP-WebServer3"
-  resource_group_name = azurerm_resource_group.RG-WebServers.name
-  location            = azurerm_resource_group.RG-WebServers.location
-  allocation_method   = "Static"
-  tags = {
-    webserver-env = "Production"
-  }
-}
+# resource "azurerm_public_ip" "PublicIP-WebServer2" {
+#   name                = "PublicIP-WebServer2"
+#   resource_group_name = azurerm_resource_group.RG-WebServers.name
+#   location            = azurerm_resource_group.RG-WebServers.location
+#   allocation_method   = "Static"
+#   tags = {
+#     webserver-env = "Production"
+#   }
+# }
+# resource "azurerm_public_ip" "PublicIP-WebServer3" {
+#   name                = "PublicIP-WebServer3"
+#   resource_group_name = azurerm_resource_group.RG-WebServers.name
+#   location            = azurerm_resource_group.RG-WebServers.location
+#   allocation_method   = "Static"
+#   tags = {
+#     webserver-env = "Production"
+#   }
+# }
 
 # Create a Network Interfaces in the production-resources resource group
-resource "azurerm_network_interface" "VNIC-WebServer1" {
-  name                = "VNIC-WebServer1"
+resource "azurerm_network_interface" "VNIC-WebServer" {
+  count = var.NO_VMs
+  name                = "VNIC-WebServer-${count.index}"
   location            = azurerm_resource_group.RG-WebServers.location
   resource_group_name = azurerm_resource_group.RG-WebServers.name
   ip_configuration {
-    name                          = "IPconfig1"
+    name                          = "IPconfig-${count.index}"
     subnet_id                     = azurerm_subnet.Subnet-WebServers.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id = azurerm_public_ip.PublicIP-WebServer1.id
+    public_ip_address_id = azurerm_public_ip.PublicIP-WebServer[count.index].id
   }
   tags = {
     webserver-env = "Production"
   }
 }
-resource "azurerm_network_interface" "VNIC-WebServer2" {
-  name                = "VNIC-WebServer2"
-  location            = azurerm_resource_group.RG-WebServers.location
-  resource_group_name = azurerm_resource_group.RG-WebServers.name
-  ip_configuration {
-    name                          = "IPconfig2"
-    subnet_id                     = azurerm_subnet.Subnet-WebServers.id
-    private_ip_address_allocation = "Dynamic"
-    public_ip_address_id = azurerm_public_ip.PublicIP-WebServer2.id
-  }
-  tags = {
-    webserver-env = "Production"
-  }
-}
-resource "azurerm_network_interface" "VNIC-WebServer3" {
-  name                = "VNIC-WebServer3"
-  location            = azurerm_resource_group.RG-WebServers.location
-  resource_group_name = azurerm_resource_group.RG-WebServers.name
-  tags = {
-    webserver-env = "Production"
-  }
-  ip_configuration {
-    name                          = "IPconfig3"
-    subnet_id                     = azurerm_subnet.Subnet-WebServers.id
-    private_ip_address_allocation = "Dynamic"
-    public_ip_address_id = azurerm_public_ip.PublicIP-WebServer3.id
-  }
-}
+# resource "azurerm_network_interface" "VNIC-WebServer2" {
+#   name                = "VNIC-WebServer2"
+#   location            = azurerm_resource_group.RG-WebServers.location
+#   resource_group_name = azurerm_resource_group.RG-WebServers.name
+#   ip_configuration {
+#     name                          = "IPconfig2"
+#     subnet_id                     = azurerm_subnet.Subnet-WebServers.id
+#     private_ip_address_allocation = "Dynamic"
+#     public_ip_address_id = azurerm_public_ip.PublicIP-WebServer2.id
+#   }
+#   tags = {
+#     webserver-env = "Production"
+#   }
+# }
+# resource "azurerm_network_interface" "VNIC-WebServer3" {
+#   name                = "VNIC-WebServer3"
+#   location            = azurerm_resource_group.RG-WebServers.location
+#   resource_group_name = azurerm_resource_group.RG-WebServers.name
+#   tags = {
+#     webserver-env = "Production"
+#   }
+#   ip_configuration {
+#     name                          = "IPconfig3"
+#     subnet_id                     = azurerm_subnet.Subnet-WebServers.id
+#     private_ip_address_allocation = "Dynamic"
+#     public_ip_address_id = azurerm_public_ip.PublicIP-WebServer3.id
+#   }
+# }
 
 #Creating a Network Security Group in the production-resource resource group
 resource "azurerm_network_security_group" "NSG-WebServers" {
@@ -135,18 +137,19 @@ resource "azurerm_network_security_rule" "AllowLocalOutbound" {
   }
 
 # Associate Network Interfaces to Network Security Groups
-resource "azurerm_network_interface_security_group_association" "VNIC-NSG-1" {
-  network_interface_id      = azurerm_network_interface.VNIC-WebServer1.id
+resource "azurerm_network_interface_security_group_association" "VNIC-NSG" {
+  count = var.NO_VMs
+  network_interface_id      = azurerm_network_interface.VNIC-WebServer[count.index].id
   network_security_group_id = azurerm_network_security_group.NSG-WebServers.id
 }
-resource "azurerm_network_interface_security_group_association" "VNIC-NSG-2" {
-  network_interface_id      = azurerm_network_interface.VNIC-WebServer2.id
-  network_security_group_id = azurerm_network_security_group.NSG-WebServers.id
-}
-resource "azurerm_network_interface_security_group_association" "VNIC-NSG-3" {
-  network_interface_id      = azurerm_network_interface.VNIC-WebServer3.id
-  network_security_group_id = azurerm_network_security_group.NSG-WebServers.id
-}
+# resource "azurerm_network_interface_security_group_association" "VNIC-NSG-2" {
+#   network_interface_id      = azurerm_network_interface.VNIC-WebServer2.id
+#   network_security_group_id = azurerm_network_security_group.NSG-WebServers.id
+# }
+# resource "azurerm_network_interface_security_group_association" "VNIC-NSG-3" {
+#   network_interface_id      = azurerm_network_interface.VNIC-WebServer3.id
+#   network_security_group_id = azurerm_network_security_group.NSG-WebServers.id
+# }
 
 #Creating a Public IP for the Load Balancer in the production-resource resource group
 resource "azurerm_public_ip" "PublicIP-LB" {
@@ -182,20 +185,21 @@ resource "azurerm_lb_backend_address_pool" "BackEndAddressPool" {
 
 #Associate WebServer NICs to LoadBalancer BackEnd Pool
 resource "azurerm_network_interface_backend_address_pool_association" "LB-VNIC-WebServer1" {
-  network_interface_id    = azurerm_network_interface.VNIC-WebServer1.id
-  ip_configuration_name   = "IPconfig1"
+  count = var.NO_VMs
+  network_interface_id    = azurerm_network_interface.VNIC-WebServer[count.index].id
+  ip_configuration_name   = "IPconfig${count.index}"
   backend_address_pool_id = azurerm_lb_backend_address_pool.BackEndAddressPool.id
 }
-resource "azurerm_network_interface_backend_address_pool_association" "LB-VNIC-WebServer2" {
-  network_interface_id    = azurerm_network_interface.VNIC-WebServer2.id
-  ip_configuration_name   = "IPconfig2"
-  backend_address_pool_id = azurerm_lb_backend_address_pool.BackEndAddressPool.id
-}
-resource "azurerm_network_interface_backend_address_pool_association" "LB-VNIC-WebServer3" {
-  network_interface_id    = azurerm_network_interface.VNIC-WebServer3.id
-  ip_configuration_name   = "IPconfig3"
-  backend_address_pool_id = azurerm_lb_backend_address_pool.BackEndAddressPool.id
-}
+# resource "azurerm_network_interface_backend_address_pool_association" "LB-VNIC-WebServer2" {
+#   network_interface_id    = azurerm_network_interface.VNIC-WebServer2.id
+#   ip_configuration_name   = "IPconfig2"
+#   backend_address_pool_id = azurerm_lb_backend_address_pool.BackEndAddressPool.id
+# }
+# resource "azurerm_network_interface_backend_address_pool_association" "LB-VNIC-WebServer3" {
+#   network_interface_id    = azurerm_network_interface.VNIC-WebServer3.id
+#   ip_configuration_name   = "IPconfig3"
+#   backend_address_pool_id = azurerm_lb_backend_address_pool.BackEndAddressPool.id
+# }
 
 # Create a WebServer Availability Set in the production-resources resource group
 resource "azurerm_availability_set" "AS-WebServers" {
@@ -209,11 +213,12 @@ resource "azurerm_availability_set" "AS-WebServers" {
 
 
 #Creating Virtual Machines Deployed from Packer Image
-resource "azurerm_virtual_machine" "WebServer1" {
-  name                  = "WebServer1"
+resource "azurerm_virtual_machine" "WebServer" {
+  count = var.NO_VMs
+  name                  = "WebServer${count.index}"
   location              = azurerm_resource_group.RG-WebServers.location
   resource_group_name   = azurerm_resource_group.RG-WebServers.name
-  network_interface_ids = [azurerm_network_interface.VNIC-WebServer1.id]
+  network_interface_ids = [azurerm_network_interface.VNIC-WebServer[count.index].id]
   vm_size               = var.VM_SIZE
   delete_os_disk_on_termination = true
   delete_data_disks_on_termination = true
@@ -223,7 +228,7 @@ resource "azurerm_virtual_machine" "WebServer1" {
     id = var.IMAGE_NAME
   }
   storage_os_disk {
-    name              = "WebServerOSdisk1"
+    name              = "WebServerOSdisk${count.index}"
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "Standard_LRS"
@@ -240,67 +245,67 @@ resource "azurerm_virtual_machine" "WebServer1" {
     webserver-env = "Production"
   }
 }
-resource "azurerm_virtual_machine" "WebServer2" {
-  name                  = "WebServer2"
-  location              = azurerm_resource_group.RG-WebServers.location
-  resource_group_name   = azurerm_resource_group.RG-WebServers.name
-  network_interface_ids = [azurerm_network_interface.VNIC-WebServer2.id]
-  vm_size               = var.VM_SIZE
-  delete_os_disk_on_termination = true
-  delete_data_disks_on_termination = true
-  availability_set_id = azurerm_availability_set.AS-WebServers.id
+# resource "azurerm_virtual_machine" "WebServer2" {
+#   name                  = "WebServer2"
+#   location              = azurerm_resource_group.RG-WebServers.location
+#   resource_group_name   = azurerm_resource_group.RG-WebServers.name
+#   network_interface_ids = [azurerm_network_interface.VNIC-WebServer2.id]
+#   vm_size               = var.VM_SIZE
+#   delete_os_disk_on_termination = true
+#   delete_data_disks_on_termination = true
+#   availability_set_id = azurerm_availability_set.AS-WebServers.id
 
-  storage_image_reference {
-    id = var.IMAGE_NAME
-  }
-  storage_os_disk {
-    name              = "WebServerOSdisk2"
-    caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
-  }
-  os_profile {
-    computer_name  = var.HOSTNAME
-    admin_username = var.USERNAME
-    admin_password = var.PASSWORD
-  }
-  os_profile_linux_config {
-    disable_password_authentication = false
-  }
-  tags = {
-    webserver-env = "Production"
-  }
-}
-resource "azurerm_virtual_machine" "WebServer3" {
-  name                  = "WebServer3"
-  location              = azurerm_resource_group.RG-WebServers.location
-  resource_group_name   = azurerm_resource_group.RG-WebServers.name
-  network_interface_ids = [azurerm_network_interface.VNIC-WebServer3.id]
-  vm_size               = var.VM_SIZE
-  delete_os_disk_on_termination = true
-  delete_data_disks_on_termination = true
-  availability_set_id = azurerm_availability_set.AS-WebServers.id
+#   storage_image_reference {
+#     id = var.IMAGE_NAME
+#   }
+#   storage_os_disk {
+#     name              = "WebServerOSdisk2"
+#     caching           = "ReadWrite"
+#     create_option     = "FromImage"
+#     managed_disk_type = "Standard_LRS"
+#   }
+#   os_profile {
+#     computer_name  = var.HOSTNAME
+#     admin_username = var.USERNAME
+#     admin_password = var.PASSWORD
+#   }
+#   os_profile_linux_config {
+#     disable_password_authentication = false
+#   }
+#   tags = {
+#     webserver-env = "Production"
+#   }
+# }
+# resource "azurerm_virtual_machine" "WebServer3" {
+#   name                  = "WebServer3"
+#   location              = azurerm_resource_group.RG-WebServers.location
+#   resource_group_name   = azurerm_resource_group.RG-WebServers.name
+#   network_interface_ids = [azurerm_network_interface.VNIC-WebServer3.id]
+#   vm_size               = var.VM_SIZE
+#   delete_os_disk_on_termination = true
+#   delete_data_disks_on_termination = true
+#   availability_set_id = azurerm_availability_set.AS-WebServers.id
 
-  storage_image_reference {
-    id = var.IMAGE_NAME
-  }
-  storage_os_disk {
-    name              = "WebServerOSdisk3"
-    caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
-  }
-  os_profile {
-    computer_name  = var.HOSTNAME
-    admin_username = var.USERNAME
-    admin_password = var.PASSWORD
-  }
-  os_profile_linux_config {
-    disable_password_authentication = false
-  }
-  tags = {
-    webserver-env = "Production"
-  }
-}
+#   storage_image_reference {
+#     id = var.IMAGE_NAME
+#   }
+#   storage_os_disk {
+#     name              = "WebServerOSdisk3"
+#     caching           = "ReadWrite"
+#     create_option     = "FromImage"
+#     managed_disk_type = "Standard_LRS"
+#   }
+#   os_profile {
+#     computer_name  = var.HOSTNAME
+#     admin_username = var.USERNAME
+#     admin_password = var.PASSWORD
+#   }
+#   os_profile_linux_config {
+#     disable_password_authentication = false
+#   }
+#   tags = {
+#     webserver-env = "Production"
+#   }
+# }
 
 

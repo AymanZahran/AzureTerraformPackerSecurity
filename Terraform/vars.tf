@@ -8,3 +8,4 @@ variable "USERNAME" {}
 variable "PASSWORD" {}
 variable "VM_SIZE" {}
 variable "HOSTNAME" {}
+variable "NO_VMs" {}
