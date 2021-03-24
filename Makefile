@@ -1,5 +1,7 @@
 Preparing-Environment:
-	chmod +x setENV.sh && bash setENV.sh
+	chmod +x setENV.sh && bash setENV.sh &&\
+	chmod +x Policies/Tagging-Policy-Definition-Execute.sh &&\
+	chmod +x Policies/Tagging-Policy-Assignment-Execute.sh &&\
 	chmod +x Packer/build-RG.sh
 
 Tagging-Policy-Definition:

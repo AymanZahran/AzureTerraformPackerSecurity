@@ -1,14 +1,11 @@
 # Azure Infrastructure Operations Project: Deploying a scalable IaaS web server in Azure
 
 ### Introduction
-For this project, you will write a Packer template and a Terraform template to deploy a customizable, scalable web server in Azure.
+For this project, you will write an Azure Policy, Packer Template and a Terraform Template to deploy a customizable, scalable, Highly Available  web server in Azure.
 
 ### Getting Started
 1. Clone this repository
-
-2. Create your infrastructure as code
-
-3. Update this README to reflect how someone would use your code.
+2. Set your Environment Variables in a file called .env (For Security reasons I hide mine but you can cp the env.example file to .env and modify it with your credentials
 
 ### Dependencies
 1. Create an [Azure Account](https://portal.azure.com) 
@@ -17,8 +14,23 @@ For this project, you will write a Packer template and a Terraform template to d
 4. Install [Terraform](https://www.terraform.io/downloads.html)
 
 ### Instructions
-**Your words here**
+Build your infrastructure by run "make Automate", That will build the following
+1. Build your environment variables locally 
+2. Give execute permissions to bash scripts
+3. Create Azure Policy to Enforce Tagging on all resources
+4. Assign the Policy on your subscription
+5. Build Packer Web Server Image 
+6. Build Terraform IaC with the following Resources:
+	a. 1 Resource Group
+	b. 1 Virtual Network with 1 Subnet
+	c. 1 NSG that controls traffic
+	d. N Azure Managed Disks
+	e. N WebServers assigned in your .env file
+	f. N Public IPs
+	g. N vNICs
+	h. 1 Availability Set
+	f. Loadbalancer
 
 ### Output
-**Your words here**
+Curl your LoadBalancer Public IP to see your deployed highly available WebServe
 
