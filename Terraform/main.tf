@@ -63,14 +63,14 @@ resource "azurerm_network_security_group" "NSG-WebServers" {
     webserver-env = "Production"
   }
 }
-resource "azurerm_network_security_rule" "AllowLocalInbound" {
+resource "azurerm_network_security_rule" "DenyInternetInbound" {
     name                       = "AllowLocalInbound"
     priority                   = 100
     direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "HTTP"
+    access                     = "Deny"
+    protocol                   = "*"
     source_port_range          = "*"
-    destination_port_range     = "80"
+    destination_port_range     = "*"
     source_address_prefix      = "*"
     destination_address_prefix = "10.0.0.0/24"
     resource_group_name         = azurerm_resource_group.RG-WebServers.name

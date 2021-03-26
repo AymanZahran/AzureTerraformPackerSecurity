@@ -18,7 +18,7 @@ Packer-RG:
 Packer-Template:
 	cd Packer && Packer build server.json && cd ..
 
-Packer-Build: Packer-RG && Packer-Template
+Packer-Build: Packer-RG Packer-Template
 
 Terraform-init:
 	cd terraform && terraform init && cd ..
