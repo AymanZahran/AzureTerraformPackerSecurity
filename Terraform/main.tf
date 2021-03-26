@@ -68,10 +68,10 @@ resource "azurerm_network_security_rule" "AllowLocalInbound" {
     priority                   = 100
     direction                  = "Inbound"
     access                     = "Allow"
-    protocol                   = "*"
+    protocol                   = "HTTP"
     source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "10.0.0.0/24"
+    destination_port_range     = "80"
+    source_address_prefix      = "*"
     destination_address_prefix = "10.0.0.0/24"
     resource_group_name         = azurerm_resource_group.RG-WebServers.name
     network_security_group_name = azurerm_network_security_group.NSG-WebServers.name

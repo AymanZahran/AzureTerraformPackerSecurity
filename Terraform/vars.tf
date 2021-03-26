@@ -8,4 +8,7 @@ variable "USERNAME" {}
 variable "PASSWORD" {}
 variable "VM_SIZE" {}
 variable "HOSTNAME" {}
-variable "NO_VMs" {}
+variable "NO_VMs" {
+  description = "The no of VMs we want in our infra"
+  default = "2"
+}
