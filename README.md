@@ -1,5 +1,8 @@
 # Azure Infrastructure Operations Project: Deploying a scalable IaaS web server in Azure
 
+### Youtube Video
+https://www.youtube.com/watch?v=7BuStHF6-rI
+
 ### Introduction
 For this project, you will write an Azure Policy, Packer Template and a Terraform Template to deploy a customizable, scalable, Highly Available  web server in Azure.
 
@@ -60,4 +63,6 @@ Build your infrastructure by run "make Automate", That will build the following
 
 ### Output
 Curl your LoadBalancer Public IP to see your deployed highly available WebServers
+
+
 
